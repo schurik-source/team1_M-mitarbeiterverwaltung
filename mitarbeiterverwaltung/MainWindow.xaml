@@ -17,7 +17,20 @@
         <Button Content="Mitarbeiter anlegen" HorizontalAlignment="Left" Margin="293,43,0,0" VerticalAlignment="Top" Width="120" Click="Mitarbeiter_anlegen"/>
         <Button Content="Mitarbeiter bearbeiten" HorizontalAlignment="Left" Margin="418,43,0,0" VerticalAlignment="Top" Width="125" Grid.ColumnSpan="2"/>
         <Button Content="Mitrabeiter loschen" HorizontalAlignment="Left" Margin="49,43,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
-        <DataGrid x:Name="Dg_Mitarbeiter" HorizontalAlignment="Left" Height="164" Margin="29,100,0,0" VerticalAlignment="Top" Width="723" Grid.ColumnSpan="2"/>
 
+        <DataGrid x:Name="Dg_Mitarbeiter" HorizontalAlignment="Left" Height="164" Margin="29,100,0,0" VerticalAlignment="Top" Width="723" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
