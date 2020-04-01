@@ -1,0 +1,23 @@
+﻿<Window x:Class="mitarbeiterverwaltung.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mitarbeiterverwaltung"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="499*"/>
+            <ColumnDefinition Width="293*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox Name="ListMA" HorizontalAlignment="Left" Height="94" Margin="29,302,0,0" VerticalAlignment="Top" Width="723" Grid.ColumnSpan="2"/>
+        <Button Content="zum Hauptmenu" HorizontalAlignment="Left" Margin="43,43,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Nachricht schreiben" HorizontalAlignment="Left" Margin="168,43,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Mitarbeiter anlegen" HorizontalAlignment="Left" Margin="293,43,0,0" VerticalAlignment="Top" Width="120" Click="Mitarbeiter_anlegen"/>
+        <Button Content="Mitarbeiter bearbeiten" HorizontalAlignment="Left" Margin="418,43,0,0" VerticalAlignment="Top" Width="125" Grid.ColumnSpan="2"/>
+        <Button Content="Mitrabeiter loschen" HorizontalAlignment="Left" Margin="49,43,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
+        <DataGrid x:Name="Dg_Mitarbeiter" HorizontalAlignment="Left" Height="164" Margin="29,100,0,0" VerticalAlignment="Top" Width="723" Grid.ColumnSpan="2"/>
+
+    </Grid>
+</Window>
