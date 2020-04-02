@@ -28,39 +28,37 @@ namespace mitarbeiterverwaltung
         public MainWindow()
         {
             InitializeComponent();
-            MySqlConnection con = new MySqlConnection("Server=localhost;Database=Team1;Uid=root;Convert Zero Datetime=True");
-
-            con.Open();
-            MySqlCommand com = new MySqlCommand("select * from t_mitarbeiter", con);
+            MySqlConnection conect = new MySqlConnection("Server=localhost;Database=Team1;Uid=root");
+            conect.Open();
+            MySqlCommand comman = new MySqlCommand("select * from t_mitarbeiter", conect);
+            
             DataTable dt = new DataTable();
-            MySqlDataAdapter da = new MySqlDataAdapter(com);
+            MySqlDataAdapter da = new MySqlDataAdapter(comman);
             da.Fill(dt);
             Dg_Mitarbeiter.ItemsSource = dt.DefaultView;
+           
             
 
+            //List<Mitarbeiter> daten = new List<Mitarbeiter>();
 
-            var reader = com.ExecuteReader();
+            //while (myreader.Read())
 
+            //{
 
+            //    var stroka = $"{myreader[0]}: {myreader[1]}: {myreader[2]} : {myreader[3]} : {myreader[4]}";
 
-            List<string> daten = new List<string>();
+            //    daten.Add(stroka);
 
-            while (reader.Read())
+            //}
+            //Dg_Mitarbeiter.ItemsSource = daten;
+            //foreach (var item in daten)
+            //{
+            //    ListMA.Items.Add(item);
 
-            {
+            //}
+            
+            conect.Close();
 
-                var stroka = $"{reader[0]}: {reader[1]}: {reader[2]} : {reader[3]} : {reader[4]}";
-
-                daten.Add(stroka);
-
-            }
-            foreach (var item in daten)
-            {
-                ListMA.Items.Add(item);
-
-            }
-
-            con.Close();
             //Dg_Mitarbeiter.ItemsSource = daten.ToList().DefaultIfEmpty();
 
             //testdatenLaden();
@@ -69,6 +67,7 @@ namespace mitarbeiterverwaltung
         void testdatenLaden()
         {
             Mitarbeiterliste.Add(new Mitarbeiter("Hans", "Wurst", new DateTime(1980,12,12) ,1, Position.Geschäftsführer, Abteilung.Personal, new DateTime(2020, 02, 13), 2000, new Bankverbindung(789456123, 456456, "Spardabank"), new KontaktDaten(new Adresse("Beispielstr.", "66a", "90402", "Nürnberg"), "hans@wurst.bsp", "0911-6548945")));
+            Mitarbeiterliste.Add(new Mitarbeiter("Peter", "Hubert", new DateTime(1981, 11, 05), 2, Position.Geschäftsführer, Abteilung.Personal, new DateTime(2020, 02, 13), 2000, new Bankverbindung(789456123, 456456, "Spardabank"), new KontaktDaten(new Adresse("Beispielstr.", "66a", "90402", "Nürnberg"), "hans@wurst.bsp", "0911-6548945")));
 
 
             //Kundenliste[0].Termine.Add(new termin(new DateTime(2020, 02, 13, 11, 00, 00), new DateTime(2020, 02, 13, 13, 00, 00), "Guter Kunde", Grund.Service));
@@ -82,8 +81,17 @@ namespace mitarbeiterverwaltung
             Mitarbeiter_Anlegen_Andern maaf = new Mitarbeiter_Anlegen_Andern(Mitarbeiterliste, -1);
             maaf.ShowDialog();
 
-            Dg_Mitarbeiter.ItemsSource = null;
-            Dg_Mitarbeiter.ItemsSource = Mitarbeiterliste;
+            //Dg_Mitarbeiter.ItemsSource = null;
+            //Dg_Mitarbeiter.ItemsSource = Mitarbeiterliste;
+        }
+
+        private void Button_berarbeiten(object sender, RoutedEventArgs e)
+        {
+            Mitarbeiter_Anlegen_Andern maaf = new Mitarbeiter_Anlegen_Andern(Mitarbeiterliste, Dg_Mitarbeiter.SelectedIndex);
+            
+            maaf.ShowDialog();
+            //Dg_Mitarbeiter.ItemsSource = null;
+            //Dg_Mitarbeiter.ItemsSource = dt.DefaultView;
         }
     }
 }

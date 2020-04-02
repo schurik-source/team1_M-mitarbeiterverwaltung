@@ -11,26 +11,27 @@
             <ColumnDefinition Width="499*"/>
             <ColumnDefinition Width="293*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Name="ListMA" HorizontalAlignment="Left" Height="94" Margin="29,302,0,0" VerticalAlignment="Top" Width="723" Grid.ColumnSpan="2"/>
         <Button Content="zum Hauptmenu" HorizontalAlignment="Left" Margin="43,43,0,0" VerticalAlignment="Top" Width="120"/>
         <Button Content="Nachricht schreiben" HorizontalAlignment="Left" Margin="168,43,0,0" VerticalAlignment="Top" Width="120"/>
         <Button Content="Mitarbeiter anlegen" HorizontalAlignment="Left" Margin="293,43,0,0" VerticalAlignment="Top" Width="120" Click="Mitarbeiter_anlegen"/>
-        <Button Content="Mitarbeiter bearbeiten" HorizontalAlignment="Left" Margin="418,43,0,0" VerticalAlignment="Top" Width="125" Grid.ColumnSpan="2"/>
+        <Button Content="Mitarbeiter bearbeiten" HorizontalAlignment="Left" Margin="418,43,0,0" VerticalAlignment="Top" Width="125" Grid.ColumnSpan="2" Click="Button_berarbeiten"/>
         <Button Content="Mitrabeiter loschen" HorizontalAlignment="Left" Margin="49,43,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
 
-        <DataGrid x:Name="Dg_Mitarbeiter" HorizontalAlignment="Left" Height="164" Margin="29,100,0,0" VerticalAlignment="Top" Width="723" Grid.ColumnSpan="2">
+        <DataGrid Name="Dg_Mitarbeiter" AutoGenerateColumns="False" Margin="29,127,40,24" Grid.ColumnSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
-                <DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="auto" />
+                <DataGridTextColumn Header="Mitarbeiter ID" Binding="{Binding Path=MitarbeiterID}" Width="Auto" />
+                <DataGridTextColumn Header="Vorname" Binding="{Binding Path=Vorname}" Width="Auto" />
+                <DataGridTextColumn Header="Nachname" Binding="{Binding Path=Nachname}" Width="Auto" />
+                <DataGridTextColumn Header="Geb.Datum" Binding="{Binding Path=Geburtsdatum, StringFormat='dd.MM.yyyy'}" Width="Auto" />
+                <DataGridTextColumn Header="Stelle" Binding="{Binding Path=Position}" Width="Auto" />
+                <DataGridTextColumn Header="Abteilung" Binding="{Binding Path=Abteilung}" Width="Auto"/>
+                <DataGridTextColumn Header="Eintrittsdatum" Binding="{Binding Path=Eintrittsdatum, StringFormat='dd.MM.yyyy'}" Width="Auto"/>
+                <DataGridTextColumn Header="Lohn" Binding="{Binding Path=Gehalt}" Width="Auto"/>
+                <DataGridTextColumn Header="Kontonummer" Binding="{Binding Path=Kontonummer}" Width="Auto"/>
+                <DataGridTextColumn Header="KontaktdatenID" Binding="{Binding Path=KontaktdatenID}" Width="Auto"/>
+
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 </Window>

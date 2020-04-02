@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+
 
 namespace mitarbeiterverwaltung
 {
@@ -22,7 +25,9 @@ namespace mitarbeiterverwaltung
     /// </summary>
     public partial class Mitarbeiter_Anlegen_Andern : Window
     {
+        //SqlDataAdapter adapter;
 
+       
         List<Mitarbeiter> Mitarbeiterliste;
         int index;
         public Mitarbeiter_Anlegen_Andern(List<Mitarbeiter> Mitarbeiterliste, int Index)
@@ -45,26 +50,45 @@ namespace mitarbeiterverwaltung
             }
             else
             {
-                TB_Vorname.Text = Mitarbeiterliste[index].Vorname ;
-                TB_NName.Text = Mitarbeiterliste[index].Nachname;
-                //Mitarbeiterliste[index].Mitarbeiterid = Convert.ToInt32(TB_MitarbeiterID.Text);
-                Mitarbeiterliste[index].Position = (Position)CB_stellung.SelectedItem;
-                Mitarbeiterliste[index].Abteilung = (Abteilung)CB_abteilung.SelectedItem;
-                Mitarbeiterliste[index].Eintrintsdatum = (DateTime)DP_eintrittsdatum.SelectedDate;
-                Mitarbeiterliste[index].Eintrintsdatum = (DateTime)DP_geburtsdatum.SelectedDate;
-                Mitarbeiterliste[index].Gehalt = Convert.ToDecimal(TB_Gehalt.Text);
-                Mitarbeiterliste[index].Kontaktdaten.Adress.Strasse = TB_Strasse.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Adress.Hausnummer = TB_HSN.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Adress.PLZ = TB_PLZ.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Adress.Ort = TB_Ort.Text;
-                Mitarbeiterliste[index].Bankverbindung.Kontonummer = Convert.ToInt32(TB_Kontonummer.Text);
-                Mitarbeiterliste[index].Bankverbindung.BLZ = Convert.ToInt32(TB_BLZ.Text);
-                Mitarbeiterliste[index].Bankverbindung.Bankname = TB_Bankname.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Telefon = TB_Telefon.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Email = TB_Email.Text;
+                MySqlConnection con = new MySqlConnection("Server=localhost;Database=Team1;Uid=root;Convert Zero Datetime=true ");
+                con.Open();
+
+                //DateTime startdatum = (DateTime)DP_eintrittsdatum.SelectedDate;
+                //var sqlFormattedDate = $"{startdatum.Year}-{startdatum.Month}-{startdatum.Day}";
+
+                //DateTime startdatum1 = (DateTime)DP_geburtsdatum.SelectedDate;
+                //var Gebdatum = $"{startdatum1.Year}-{startdatum1.Month}-{startdatum1.Day}";
+
+                MySqlCommand mitarbeiter = new MySqlCommand($" select * from t_mitarbeiter ", con);
+
+
+                var reader = mitarbeiter.ExecuteReader();
+
+
+                while (reader.Read())
+
+                {
+                    TB_maID.Text = reader[0].ToString();
+                    TB_Vorname.Text = reader[1].ToString();
+                    TB_NName.Text = reader[2].ToString();
+                    DP_geburtsdatum.SelectedDate = reader.GetDateTime(reader.GetOrdinal("Geburtsdatum"));
+                    string position = reader[4].ToString();
+                    Enum.TryParse<Position>(position, out Position p);
+                    CB_stellung.SelectedItem = p;
+                    string abteilung = reader[5].ToString();
+                    Enum.TryParse<Abteilung>(abteilung, out Abteilung a);
+                    CB_abteilung.SelectedItem = a;
+                    DP_eintrittsdatum.SelectedDate = reader.GetDateTime(reader.GetOrdinal("Eintrittsdatum"));
+                    TB_Gehalt.Text = reader[7].ToString();
+                }
+
+
+                this.Title = "Mitarbeiterdaten ändern";
+                BT_OK.Content = "Daten ändern";
             }
 
         }
+      
 
         private void BT_OK_Click(object sender, RoutedEventArgs e)
         {
@@ -77,67 +101,73 @@ namespace mitarbeiterverwaltung
                 DateTime startdatum1 = (DateTime)DP_geburtsdatum.SelectedDate;
                 var Gebdatum = $"{startdatum1.Year}-{startdatum1.Month}-{startdatum1.Day}";
 
-                //DateTime myDateTime = DateTime.Now;
-                //string sqlFormattedDate = myDateTime.Date.ToString("yyyy-MM-dd HH:mm:ss");
-                //string sqlFormattedDate = myDateTime.Date.ToString("yyyy-MM-dd") + " " +myDateTime.TimeOfDay.ToString("HH:mm:ss");
-                //sqlFormattedDate = DP_eintrittsdatum.SelectedDate.ToString();
 
 
-                MySqlConnection con = new MySqlConnection("Server=localhost;Database=Team1;Uid=root;");
-                con.Open();
                 //neu
+
+                //Mitarbeiterliste.Add(new Mitarbeiter(TB_Vorname.Text, TB_NName.Text, (DateTime)DP_geburtsdatum.SelectedDate, (Position)CB_stellung.SelectedItem, (Abteilung)CB_abteilung.SelectedItem, (DateTime)DP_eintrittsdatum.SelectedDate, Convert.ToDecimal(TB_Gehalt.Text), new Bankverbindung(Convert.ToInt32(TB_Kontonummer.Text), Convert.ToInt32(TB_BLZ.Text), TB_Bankname.Text), new KontaktDaten(new Adresse(TB_Strasse.Text, TB_HSN.Text, TB_PLZ.Text, TB_Ort.Text), TB_Email.Text, TB_Telefon.Text)));
+
+                MySqlConnection con = new MySqlConnection("Server=localhost;Database=Team1;Uid=root;;Convert Zero Datetime=True;");
+                con.Open();
+                //foreach (var item in Mitarbeiterliste)
+                //{
                 MySqlCommand adresse = new MySqlCommand($"insert into t_adresse values(null, '{ TB_Strasse.Text }' , '{ TB_HSN.Text}',' " + TB_PLZ.Text + "', ' " + TB_Ort.Text + "')", con);
+                //MySqlCommand adresse = new MySqlCommand($"insert into t_adresse values(null, '{ item.Kontaktdaten.Adress.Strasse }' , '{ item.Kontaktdaten.Adress.Hausnummer}',' " + item.Kontaktdaten.Adress.PLZ + "', ' " + item.Kontaktdaten.Adress.Ort + "')", con);
 
                 adresse.ExecuteNonQuery();
 
-                MySqlCommand bankverbindung = new MySqlCommand($"insert into t_bankverbindung values('{TB_Kontonummer.Text}' , '{ TB_BLZ.Text }' , '{TB_Bankname.Text}'  )", con);
+                MySqlCommand bankverbindung = new MySqlCommand($"insert into t_bankverbindung values(null,'{TB_Kontonummer.Text}' , '{ TB_BLZ.Text }' , '{TB_Bankname.Text}'  )", con);
+                //MySqlCommand bankverbindung = new MySqlCommand($"insert into t_bankverbindung values('{item.Bankverbindung.Kontonummer}' , '{ item.Bankverbindung.BLZ }' , '{item.Bankverbindung.Bankname}'  )", con);
 
                 bankverbindung.ExecuteNonQuery();
 
-                MySqlCommand Mitarbeiter = new MySqlCommand($"insert into t_mitarbeiter values(null,'{TB_Vorname.Text}' ,'{TB_NName.Text}' , '{Gebdatum}', ' { (Position)CB_stellung.SelectedItem }', ' { (Abteilung)CB_abteilung.SelectedItem }',  '{sqlFormattedDate}' , ' {Convert.ToDecimal(TB_Gehalt.Text) }', null,null  )", con);
+                MySqlCommand mitarbeiter = new MySqlCommand($"insert into t_mitarbeiter values(null,'{TB_Vorname.Text}' ,'{TB_NName.Text}' , '{Gebdatum}', ' { (Position)CB_stellung.SelectedItem }', ' { (Abteilung)CB_abteilung.SelectedItem }',  '{sqlFormattedDate}' , ' {Convert.ToDecimal(TB_Gehalt.Text) }','{TB_Kontonummer.Text}',null  )", con);
+                //MySqlCommand mitarbeiter = new MySqlCommand($"insert into t_mitarbeiter values(null,'{item.Vorname}' ,'{item.Nachname}' , '{item.GebDatum}', ' { item.Position }', ' { item.Abteilung }',  '{item.Eintrintsdatum}' , ' {item.Gehalt }', null,null  )", con);
 
-                Mitarbeiter.ExecuteNonQuery();
+                mitarbeiter.ExecuteNonQuery();
 
                 MySqlCommand kontaktdaten = new MySqlCommand($"insert into t_kontaktdaten values(null, null,'{TB_Telefon.Text}' , '{TB_Email.Text }'  )", con);
+                //MySqlCommand kontaktdaten = new MySqlCommand($"insert into t_kontaktdaten values(null, null,'{item.Kontaktdaten.Telefon}' , '{item.Kontaktdaten.Email }'  )", con);
 
                 kontaktdaten.ExecuteNonQuery();
-
-
-                //Mitarbeiterliste.Add(new Mitarbeiter(TB_Vorname.Text, TB_NName.Text, Convert.ToInt32(TB_MitarbeiterID.Text), (Position)CB_stellung.SelectedItem, (Abteilung)CB_abteilung.SelectedItem, (DateTime)DP_eintrittsdatum.SelectedDate, Convert.ToDecimal(TB_Gehalt.Text), new Bankverbindung(Convert.ToInt32(TB_Kontonummer.Text), Convert.ToInt32(TB_BLZ.Text), TB_Bankname.Text), new KontaktDaten(new Adresse(TB_Strasse.Text, TB_HSN.Text, TB_PLZ.Text, TB_Ort.Text), TB_Email.Text, TB_Telefon.Text)));
             }
-            else
+
+           else
             {
                 //ändern
 
-                MySqlConnection con = new MySqlConnection("Server=localhost;Database=Team1;Uid=root;Convert Zero Datetime=True");
+                //MySqlConnection con = new MySqlConnection("Server=localhost;Database=Team1;Uid=root;");
+                //con.Open();
+
+                //DateTime startdatum = (DateTime)DP_eintrittsdatum.SelectedDate;
+                //var sqlFormattedDate = $"{startdatum.Year}-{startdatum.Month}-{startdatum.Day}";
+
+                //DateTime startdatum1 = (DateTime)DP_geburtsdatum.SelectedDate;
+                //var Gebdatum = $"{startdatum1.Year}-{startdatum1.Month}-{startdatum1.Day}";
+
+                //MySqlCommand mitarbeiter = new MySqlCommand($" update  t_mitarbeiter set mitarbeiterid where id =   '{TB_Vorname.Text}' ,'{TB_NName.Text}' , '{Gebdatum}', ' { (Position)CB_stellung.SelectedItem }', ' { (Abteilung)CB_abteilung.SelectedItem }',  '{sqlFormattedDate}' , ' {Convert.ToDecimal(TB_Gehalt.Text) }', null,null  )", con);
+
+                //mitarbeiter.ExecuteNonQuery();
 
 
 
-                Mitarbeiterliste[index].Vorname = TB_Vorname.Text;
-                Mitarbeiterliste[index].Nachname = TB_NName.Text;
-                //Mitarbeiterliste[index].Mitarbeiterid = Convert.ToInt32(TB_MitarbeiterID.Text);
-                Mitarbeiterliste[index].Position = (Position)CB_stellung.SelectedItem;
-                Mitarbeiterliste[index].Abteilung = (Abteilung)CB_abteilung.SelectedItem;
-                Mitarbeiterliste[index].Eintrintsdatum = (DateTime)DP_eintrittsdatum.SelectedDate;
-                Mitarbeiterliste[index].Eintrintsdatum = (DateTime)DP_geburtsdatum.SelectedDate;
-                Mitarbeiterliste[index].Gehalt = Convert.ToDecimal(TB_Gehalt.Text);
-                Mitarbeiterliste[index].Kontaktdaten.Adress.Strasse = TB_Strasse.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Adress.Hausnummer = TB_HSN.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Adress.PLZ = TB_PLZ.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Adress.Ort = TB_Ort.Text;
-                Mitarbeiterliste[index].Bankverbindung.Kontonummer = Convert.ToInt32(TB_Kontonummer.Text);
-                Mitarbeiterliste[index].Bankverbindung.BLZ = Convert.ToInt32(TB_BLZ.Text);
-                Mitarbeiterliste[index].Bankverbindung.Bankname = TB_Bankname.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Telefon = TB_Telefon.Text;
-                Mitarbeiterliste[index].Kontaktdaten.Email = TB_Email.Text;
+                MySqlConnection conect = new MySqlConnection("Server=localhost;Database=Team1;Uid=root");
+                conect.Open();
+                string query = $"update t_mitarbeiter set Vorname='{TB_Vorname.Text}' where  MitarbeiterID= '{TB_maID.Text}' ";
+                MySqlCommand comman = new MySqlCommand(query, conect);
+                comman.ExecuteNonQuery();
 
+
+                //conect.Close();
 
 
 
 
             }
-
+            
             this.Close();
         }
+
+        
     }
 }
